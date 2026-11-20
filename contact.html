@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مَدار | تواصل معنا</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="contact.css">
+</head>
+<body>
+
+    <div class="space-bg"></div>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="logo-orbit"></span>
+                <span>مَدار</span>
+            </a>
+
+            <nav class="nav-tabs" id="navTabs">
+                <a href="index.html" class="tab-link" data-tab="home">الرئيسية</a>
+                <a href="categories.html" class="tab-link" data-tab="categories">الأقسام</a>
+                <a href="gifts.html" class="tab-link" data-tab="gifts">هدايا</a>
+                <a href="about.html" class="tab-link" data-tab="about">حول مدار</a>
+                <a href="contact.html" class="tab-link active" data-tab="contact">تواصل معنا</a>
+            </nav>
+
+            <a href="contact.html" class="nav-cta-btn">تواصل معنا</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h1>تواصل مع فريق مَدار</h1>
+            <p>اضغط على بطاقة أي عضو من فريق المكتبة لفتح نافذة التواصل المباشر معه</p>
+        </section>
+
+        <section class="team-grid" id="teamGrid"></section>
+
+        <section class="contact-box-panel" id="contactBoxPanel" aria-live="polite">
+            <div class="contact-panel-header">
+                <div>
+                    <h2 id="selectedMemberTitle"></h2>
+                    <p id="selectedMemberRole"></p>
+                </div>
+                <button type="button" class="close-panel-btn" id="closeContactPanel">إغلاق</button>
+            </div>
+
+            <form class="contact-form" id="directContactForm">
+                <input type="text" id="senderName" placeholder="اسمك الكريم" required>
+                <input type="text" id="senderInfo" placeholder="رقم الهاتف أو وسيلة التواصل" required>
+                <textarea id="senderMessage" placeholder="اكتب رسالتك أو استفسارك هنا..." required></textarea>
+                <button type="submit" class="send-msg-btn">إرسال الرسالة</button>
+                <p class="status-note" id="formStatusNote"></p>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const teamMembers = [
+            {
+                id: "sahar",
+                name: "سحر حسين",
+                role: "مديرة المكتبة والمسؤولة عن إدارة كامل المكتبة"
+            },
+            {
+                id: "shather",
+                name: "شذر محمد",
+                role: "مسؤولة الرد على الطلبات ومتابعة استفسارات القرّاء"
+            },
+            {
+                id: "zainab",
+                name: "زينب علي",
+                role: "مسؤولة تجهيز الطلبات وتغليف الكتب والهدايا"
+            },
+            {
+                id: "zahraa-t",
+                name: "زهراء توفيق",
+                role: "أمينة المكتبة المسؤولة عن توصيل الكتب"
+            },
+            {
+                id: "zahraa-sh",
+                name: "زهراء شهاب",
+                role: "مسؤولة تنظيم الأقسام وتصنيف الكتب"
+            },
+            {
+                id: "zahraa-s",
+                name: "زهراء سوادي",
+                role: "مسؤولة الهدايا والفواتير والعروض الخاصة"
+            }
+        ];
+
+        const teamGridEl = document.getElementById("teamGrid");
+        const contactPanelEl = document.getElementById("contactBoxPanel");
+        const selectedTitleEl = document.getElementById("selectedMemberTitle");
+        const selectedRoleEl = document.getElementById("selectedMemberRole");
+        const closePanelBtn = document.getElementById("closeContactPanel");
+        const contactFormEl = document.getElementById("directContactForm");
+        const statusNoteEl = document.getElementById("formStatusNote");
+
+        let activeMember = null;
+
+        function renderTeam() {
+            teamGridEl.innerHTML = "";
+
+            teamMembers.forEach(member => {
+                const card = document.createElement("div");
+                card.className = "member-card";
+                card.dataset.id = member.id;
+                card.setAttribute("role", "button");
+                card.setAttribute("tabindex", "0");
+
+                card.innerHTML = `
+                    <div class="member-name">${member.name}</div>
+                    <div class="member-role">${member.role}</div>
+                    <span class="member-action-hint">اضغط للتواصل</span>
+                `;
+
+                const selectHandler = () => {
+                    activeMember = member;
+                    statusNoteEl.textContent = "";
+                    teamGridEl.querySelectorAll(".member-card").forEach(el => {
+                        el.classList.toggle("selected", el.dataset.id === member.id);
+                    });
+                    selectedTitleEl.textContent = `التواصل مع: ${member.name}`;
+                    selectedRoleEl.textContent = member.role;
+                    contactPanelEl.classList.add("active");
+                    contactPanelEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                };
+
+                card.addEventListener("click", selectHandler);
+                card.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        selectHandler();
+                    }
+                });
+
+                teamGridEl.appendChild(card);
+            });
+        }
+
+        closePanelBtn.addEventListener("click", () => {
+            activeMember = null;
+            contactPanelEl.classList.remove("active");
+            teamGridEl.querySelectorAll(".member-card").forEach(el => el.classList.remove("selected"));
+        });
+
+        contactFormEl.addEventListener("submit", (e) => {
+            e.preventDefault();
+            if (!activeMember) return;
+            const nameVal = document.getElementById("senderName").value.trim();
+            statusNoteEl.textContent = `تم تجهيز رسالتك إلى (${activeMember.name} — ${activeMember.role}) باسم ${nameVal}.`;
+            contactFormEl.reset();
+        });
+
+        renderTeam();
+    </script>
+</body>
+</html>

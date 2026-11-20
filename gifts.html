@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مَدار | الهدايا</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gifts.css">
+</head>
+<body>
+
+    <div class="space-bg"></div>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="logo-orbit"></span>
+                <span>مَدار</span>
+            </a>
+
+            <nav class="nav-tabs" id="navTabs">
+                <a href="index.html" class="tab-link">الرئيسية</a>
+                <a href="categories.html" class="tab-link">الأقسام</a>
+                <a href="gifts.html" class="tab-link active">هدايا</a>
+                <a href="about.html" class="tab-link">حول مدار</a>
+                <a href="contact.html" class="tab-link">تواصل معنا</a>
+            </nav>
+
+            <a href="index.html#contact" class="nav-cta-btn">تواصل معنا</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h1>هدايا مكتبة مَدار</h1>
+            <p>اضغط على اسم أي هدية لعرض تفاصيلها وسعرها وضمن أي نوع هدايا تندرج</p>
+        </section>
+
+        <section class="gifts-grid" id="giftsGrid"></section>
+
+        <section class="gift-caption-panel" id="giftCaptionPanel" aria-live="polite">
+            <div class="caption-header">
+                <h2 id="captionGiftTitle"></h2>
+                <button type="button" class="close-caption-btn" id="closeCaptionBtn">إغلاق</button>
+            </div>
+            <div class="caption-details">
+                <p class="caption-row"><span class="caption-label">الكابشن:</span><span id="captionGiftDesc"></span></p>
+                <p class="caption-row"><span class="caption-label">سعر الفاتورة:</span><span id="captionGiftPrice"></span></p>
+                <p class="caption-row"><span class="caption-label">ملاحظة — ضمن أي نوع هدايا:</span><span id="captionGiftGroup"></span></p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const giftsData = [
+            {
+                id: "bookmark",
+                name: "فواصل",
+                caption: "فواصل كتب أو لاصقات عملية تحفظ مكان القراءة وترافق القارئ في صفحاته.",
+                price: "10,000 د.ع",
+                groupNote: "تندرج ضمن هدايا الفاتورة الأساسية (10,000 د.ع)، وتُضمّ أيضاً إلى المجموعة المكتبية (دفتر + قلم + فاصل) بقيمة 60,000 د.ع وباقة جميع الهدايا بقيمة 100,000 د.ع.",
+                svg: `
+                    <svg class="gift-shape-svg" viewBox="0 0 100 140">
+                        <rect x="28" y="16" width="44" height="92" rx="5" class="gift-shape-fill"></rect>
+                        <line x1="50" y1="108" x2="50" y2="128"></line>
+                        <circle cx="50" cy="131" r="4" class="gift-shape-fill"></circle>
+                    </svg>
+                `
+            },
+            {
+                id: "book-light",
+                name: "إضاءة كتب",
+                caption: "ضوء للقراءة يمنح إضاءة هادئة ومريحة للعين أثناء القراءة في الأجواء الخافتة أو الليلية.",
+                price: "25,000 د.ع",
+                groupNote: "تندرج ضمن هدايا القراءة المتوسطة (25,000 د.ع)، وتأتي أيضاً ضمن باقة جميع الهدايا بقيمة 100,000 د.ع.",
+                svg: `
+                    <svg class="gift-shape-svg" viewBox="0 0 100 140">
+                        <rect x="22" y="20" width="56" height="84" rx="8" class="gift-shape-fill"></rect>
+                        <line x1="36" y1="42" x2="64" y2="42"></line>
+                        <line x1="36" y1="60" x2="64" y2="60"></line>
+                        <path d="M34 118 Q50 106 66 118"></path>
+                    </svg>
+                `
+            },
+            {
+                id: "pen",
+                name: "قلم",
+                caption: "قلم جيد للكتابة مخصص لتدوين الملاحظات والأفكار والفوائد أثناء المطالعة.",
+                price: "15,000 د.ع",
+                groupNote: "يندرج ضمن هدايا الكتابة والتدوين (15,000 د.ع)، ويدخل ضمن المجموعة المكتبية (دفتر + قلم + فاصل) بقيمة 60,000 د.ع وباقة جميع الهدايا بقيمة 100,000 د.ع.",
+                svg: `
+                    <svg class="gift-shape-svg" viewBox="0 0 100 140">
+                        <path d="M50 16 L60 36 L60 104 L50 124 L40 104 L40 36 Z" class="gift-shape-fill"></path>
+                        <line x1="40" y1="44" x2="60" y2="44"></line>
+                        <line x1="50" y1="16" x2="50" y2="36"></line>
+                    </svg>
+                `
+            },
+            {
+                id: "quran",
+                name: "قرآن",
+                caption: "القرآن الكريم كهدية قيمة ومباركة تضفي سكينة ووقاراً لمقتنيها.",
+                price: "35,000 د.ع",
+                groupNote: "يندرج ضمن الهدايا الخاصة والمميزة (35,000 د.ع)، ويأتي أيضاً ضمن باقة جميع الهدايا بقيمة 100,000 د.ع.",
+                svg: `
+                    <svg class="gift-shape-svg" viewBox="0 0 100 140">
+                        <path d="M50 32 C38 24 22 26 16 32 L16 110 C24 104 38 104 50 112 C62 104 76 104 84 110 L84 32 C78 26 62 24 50 32 Z" class="gift-shape-fill"></path>
+                        <line x1="50" y1="32" x2="50" y2="112"></line>
+                    </svg>
+                `
+            },
+            {
+                id: "notebook",
+                name: "نوت دفتر",
+                caption: "دفتر ملاحظات أنيق لتسجيل الملخصات والخواطر والخطط اليومية.",
+                price: "15,000 د.ع",
+                groupNote: "يندرج ضمن هدايا الكتابة والتدوين (15,000 د.ع)، ويدخل ضمن هدايا المجموعات والحقائب (حقيبة قماشية للكتب أو مجموعة مكتبية: دفتر + قلم + فاصل) بقيمة 60,000 د.ع وباقة جميع الهدايا بقيمة 100,000 د.ع.",
+                svg: `
+                    <svg class="gift-shape-svg" viewBox="0 0 100 140">
+                        <rect x="22" y="20" width="56" height="100" rx="6" class="gift-shape-fill"></rect>
+                        <line x1="34" y1="44" x2="66" y2="44"></line>
+                        <line x1="34" y1="64" x2="66" y2="64"></line>
+                        <line x1="34" y1="84" x2="56" y2="84"></line>
+                    </svg>
+                `
+            }
+        ];
+
+        const giftsGridEl = document.getElementById("giftsGrid");
+        const captionPanelEl = document.getElementById("giftCaptionPanel");
+        const captionTitleEl = document.getElementById("captionGiftTitle");
+        const captionDescEl = document.getElementById("captionGiftDesc");
+        const captionPriceEl = document.getElementById("captionGiftPrice");
+        const captionGroupEl = document.getElementById("captionGiftGroup");
+        const closeCaptionBtn = document.getElementById("closeCaptionBtn");
+
+        let selectedGiftId = null;
+
+        function renderGifts() {
+            giftsGridEl.innerHTML = "";
+
+            giftsData.forEach(gift => {
+                const col = document.createElement("div");
+                col.className = "gift-column";
+                col.dataset.id = gift.id;
+
+                col.innerHTML = `
+                    <div class="gift-vertical-box">
+                        ${gift.svg}
+                    </div>
+                    <button type="button" class="gift-name-btn" data-id="${gift.id}">
+                        ${gift.name}
+                    </button>
+                `;
+
+                const nameBtn = col.querySelector(".gift-name-btn");
+                nameBtn.addEventListener("click", () => {
+                    if (selectedGiftId === gift.id) {
+                        closeCaption();
+                        return;
+                    }
+                    selectedGiftId = gift.id;
+                    updateSelectedGift();
+                    showCaption(gift);
+                });
+
+                giftsGridEl.appendChild(col);
+            });
+        }
+
+        function updateSelectedGift() {
+            const cols = giftsGridEl.querySelectorAll(".gift-column");
+            cols.forEach(col => {
+                col.classList.toggle("selected", col.dataset.id === selectedGiftId);
+            });
+        }
+
+        function showCaption(gift) {
+            captionTitleEl.textContent = gift.name;
+            captionDescEl.textContent = gift.caption;
+            captionPriceEl.textContent = gift.price;
+            captionGroupEl.textContent = gift.groupNote;
+            captionPanelEl.classList.add("active");
+            captionPanelEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+
+        function closeCaption() {
+            selectedGiftId = null;
+            updateSelectedGift();
+            captionPanelEl.classList.remove("active");
+        }
+
+        closeCaptionBtn.addEventListener("click", closeCaption);
+
+        renderGifts();
+    </script>
+</body>
+</html>

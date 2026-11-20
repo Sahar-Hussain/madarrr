@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مَدار | الأقسام</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="categories.css">
+</head>
+<body>
+
+    <div class="space-bg"></div>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="logo-orbit"></span>
+                <span>مَدار</span>
+            </a>
+
+            <nav class="nav-tabs" id="navTabs">
+                <a href="index.html" class="tab-link">الرئيسية</a>
+                <a href="categories.html" class="tab-link active">الأقسام</a>
+                <a href="index.html" class="tab-link">هدايا</a>
+                <a href="about.html" class="tab-link">حول مدار</a>
+                <a href="contact.html" class="tab-link">تواصل معنا</a>
+            </nav>
+
+            <a href="index.html#contact" class="nav-cta-btn">تواصل معنا</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h1>أقسام مكتبة مَدار</h1>
+            <p>اختر التصنيف الرئيسي لاستعراض تصنيفاته الفرعية</p>
+        </section>
+
+        <section class="main-categories-grid" id="mainCategoriesGrid"></section>
+
+        <section class="subcategories-panel" id="subcategoriesPanel" aria-live="polite">
+            <div class="panel-top">
+                <h2 id="selectedCategoryTitle"></h2>
+                <button type="button" class="close-panel-btn" id="closePanelBtn">إغلاق</button>
+            </div>
+            <div class="subcategories-grid" id="subcategoriesGrid"></div>
+        </section>
+    </main>
+
+    <script>
+        const categoriesData = [
+            {
+                id: "religion",
+                title: "ديني",
+                subs: [
+                    { name: "القرآن الكريم", desc: "القرآن" },
+                    { name: "قصص الأنبياء", desc: "كتب عن الأنبياء وقصصهم" },
+                    { name: "تفسير القرآن", desc: "كتب عن تفسير القرآن" },
+                    { name: "الأحاديث النبوية", desc: "كتب عن الأحاديث" },
+                    { name: "الفقه وأصول الفقه", desc: "كتب عن الفقه" },
+                    { name: "عامة", desc: "كتب دينية عامة" }
+                ]
+            },
+            {
+                id: "literature",
+                title: "الأدب والروايات",
+                subs: [
+                    { name: "الروايات الاجتماعية", desc: "كتب عن الروايات الاجتماعية" },
+                    { name: "الروايات التاريخية", desc: "روايات مستوحاة من الأحداث التاريخية" },
+                    { name: "القصص القصيرة", desc: "مجموعات قصصية مختارة" },
+                    { name: "الشعر والنثر", desc: "دواوين شعرية ونصوص نثرية" },
+                    { name: "روايات الخيال العالمي", desc: "أعمال خيالية وعالمية مترجمة" },
+                    { name: "عامة", desc: "كتب أدبية عامة" }
+                ]
+            },
+            {
+                id: "philosophy",
+                title: "الفلسفة والعلوم الإنسانية",
+                subs: [
+                    { name: "الفلسفة والمنطق", desc: "مباحث الفلسفة وقواعد الاستدلال والمنطق" },
+                    { name: "علم النفس", desc: "دراسات السلوك والعمليات الذهنية" },
+                    { name: "الأخلاق", desc: "القيم والمبادئ الأخلاقية" },
+                    { name: "التنمية البشرية", desc: "تطوير الذات والمهارات الحياتية" },
+                    { name: "التربية والتعليم", desc: "أساليب التعلم والمناهج التربوية" },
+                    { name: "عامة", desc: "كتب فلسفة عامة" }
+                ]
+            },
+            {
+                id: "history",
+                title: "التأريخ",
+                subs: [
+                    { name: "التأريخ القديم والحديث", desc: "تسلسل العصور التاريخية القديمة والحديثة" },
+                    { name: "تأريخ الحضارات", desc: "نشأة الحضارات الإنسانية وتطورها" },
+                    { name: "التأريخ السياسي والعسكري", desc: "الوقائع السياسية والتحولات العسكرية" },
+                    { name: "السير والقصص التاريخية", desc: "تراجم الشخصيات وسرد الوقائع" },
+                    { name: "الآثار", desc: "اكتشافات وشواهد الحضارات" },
+                    { name: "عامة", desc: "كتب تأريخية عامة" }
+                ]
+            },
+            {
+                id: "natural-sciences",
+                title: "العلوم الطبيعية",
+                subs: [
+                    { name: "علم النبات", desc: "دراسة النباتات وتصنيفها وبيئتها" },
+                    { name: "علم الأرض", desc: "الجيولوجيا وطبقات الأرض والظواهر الطبيعية" },
+                    { name: "علم الحيوان", desc: "عالم الحيوان وسلوكياته وتصنيفاته" },
+                    { name: "الفلك والفضاء", desc: "النجوم والكواكب والكون" },
+                    { name: "البيئة والطبيعة", desc: "التوازن البيئي وحماية الموارد الطبيعية" },
+                    { name: "عامة", desc: "كتب علوم عامة" }
+                ]
+            },
+            {
+                id: "medicine",
+                title: "الطب والصحة",
+                subs: [
+                    { name: "الطب البشري", desc: "العلوم الطبية والتخصصات السريرية" },
+                    { name: "الصحة والبيئة", desc: "أثر العوامل البيئية على الصحة العامة" },
+                    { name: "الصحة العامة والتغذية", desc: "الوقاية الصحية والأنظمة الغذائية" },
+                    { name: "الأدوية والعقاقير والعلاج", desc: "المستحضرات الدوائية والأساليب العلاجية" },
+                    { name: "الرعاية الصحية", desc: "الخدمات الصحية والعناية بالمرضى" },
+                    { name: "عامة", desc: "كتب طبية عامة" }
+                ]
+            },
+            {
+                id: "languages",
+                title: "اللغات",
+                subs: [
+                    { name: "اللغة الإنجليزية", desc: "قواعد ومفردات ومهارات اللغة الإنجليزية" },
+                    { name: "اللغة العربية", desc: "النحو والصرف والبلاغة والأدب اللغوي" },
+                    { name: "اللغة التركية", desc: "تعلم وممارسة اللغة التركية" },
+                    { name: "اللغة الألمانية", desc: "أساسيات ومستويات اللغة الألمانية" },
+                    { name: "اللغة اللاتينية", desc: "أصول وقواعد اللغة اللاتينية" },
+                    { name: "عامة", desc: "كتب لغات عامة" }
+                ]
+            },
+            {
+                id: "cooking",
+                title: "فن الطبخ",
+                subs: [
+                    { name: "الغذاء الصحي", desc: "وصفات متوازنة ومغذية" },
+                    { name: "المشروبات", desc: "مشروبات ساخنة وباردة وعصائر" },
+                    { name: "حفظ الأغذية", desc: "طرق التخزين والحفظ السليم للأطعمة" },
+                    { name: "طرق الطهي", desc: "تقنيات وأساليب إعداد الطعام" },
+                    { name: "الحلويات والمعجنات", desc: "المخبوزات والحلويات المتنوعة" },
+                    { name: "عامة", desc: "كتب طبخ عامة" }
+                ]
+            }
+        ];
+
+        const gridEl = document.getElementById("mainCategoriesGrid");
+        const panelEl = document.getElementById("subcategoriesPanel");
+        const panelTitleEl = document.getElementById("selectedCategoryTitle");
+        const subGridEl = document.getElementById("subcategoriesGrid");
+        const closeBtn = document.getElementById("closePanelBtn");
+
+        let activeCategoryId = null;
+
+        function renderMainCategories() {
+            gridEl.innerHTML = "";
+            categoriesData.forEach(cat => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "gold-category-rect";
+                btn.dataset.id = cat.id;
+                btn.textContent = cat.title;
+
+                btn.addEventListener("click", () => {
+                    if (activeCategoryId === cat.id) {
+                        closeSubcategories();
+                        return;
+                    }
+                    activeCategoryId = cat.id;
+                    updateSelectedButton();
+                    renderSubcategories(cat);
+                });
+
+                gridEl.appendChild(btn);
+            });
+        }
+
+        function updateSelectedButton() {
+            const buttons = gridEl.querySelectorAll(".gold-category-rect");
+            buttons.forEach(btn => {
+                btn.classList.toggle("selected", btn.dataset.id === activeCategoryId);
+            });
+        }
+
+        function renderSubcategories(category) {
+            panelTitleEl.textContent = `التصنيفات الفرعية — ${category.title}`;
+            subGridEl.innerHTML = "";
+
+            category.subs.forEach(sub => {
+                const card = document.createElement("div");
+                card.className = "sub-card";
+                card.innerHTML = `
+                    <div class="sub-title">${sub.name}</div>
+                    <div class="sub-desc">${sub.desc}</div>
+                `;
+                subGridEl.appendChild(card);
+            });
+
+            panelEl.classList.add("active");
+            panelEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+
+        function closeSubcategories() {
+            activeCategoryId = null;
+            updateSelectedButton();
+            panelEl.classList.remove("active");
+        }
+
+        closeBtn.addEventListener("click", closeSubcategories);
+
+        renderMainCategories();
+    </script>
+</body>
+</html>
